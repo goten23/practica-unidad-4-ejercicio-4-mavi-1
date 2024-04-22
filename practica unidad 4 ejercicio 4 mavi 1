@@ -1,0 +1,57 @@
+import pygame
+import sys
+
+# Inicializar pygame
+pygame.init()
+
+# Configuración de la ventana
+screen_width = 800
+screen_height = 600
+screen = pygame.display.set_mode((screen_width, screen_height))
+pygame.display.set_caption("Atrapado")
+
+# Cargar imágenes
+square_img = pygame.image.load("cuad_yellow.png")
+circle_img = pygame.image.load("rcircleg.png")
+
+# Definir posiciones iniciales
+square_pos = [screen_width // 2, screen_height // 2]
+circle_pos = [screen_width // 2, screen_height // 2]
+
+# Indicar el sprite que se está utilizando actualmente
+current_sprite = "square"
+
+# Bucle principal
+while True:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            sys.exit()
+        elif event.type == pygame.KEYDOWN:
+            # Mover el cuadrado con las teclas de dirección
+            if event.key == pygame.K_LEFT:
+                square_pos[0] -= 10
+            elif event.key == pygame.K_RIGHT:
+                square_pos[0] += 10
+            elif event.key == pygame.K_UP:
+                square_pos[1] -= 10
+            elif event.key == pygame.K_DOWN:
+                square_pos[1] += 10
+            # Cambiar entre el cuadrado y el círculo con la barra espaciadora
+            elif event.key == pygame.K_SPACE:
+                if current_sprite == "square":
+                    current_sprite = "circle"
+                else:
+                    current_sprite = "square"
+    
+    # Mantener el cuadrado dentro de la pantalla
+    square_pos[0] = max(0, min(screen_width - square_img.get_width(), square_pos[0]))
+    square_pos[1] = max(0, min(screen_height - square_img.get_height(), square_pos[1]))
+
+    # Dibujar en pantalla
+    screen.fill((255, 255, 255))  # Llenar la pantalla de blanco
+    if current_sprite == "square":
+        screen.blit(square_img, square_pos)
+    else:
+        screen.blit(circle_img, square_pos)
+    pygame.display.flip()
